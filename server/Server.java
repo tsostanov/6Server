@@ -1,6 +1,7 @@
 package server;
 
 import commands.ReadCommand;
+import data.ResultData;
 import inner_client.Warning;
 import data.CommandData;
 import labCollection.LabCollection;
@@ -24,7 +25,7 @@ import java.util.logging.SimpleFormatter;
 //Final version must be  here
 public class Server {
     Logger logger = Logger.getLogger(Server.class.getName());
-    public Server(LabCollection labCollection) throws Exception{
+    public Server(LabCollection labCollection) throws Exception, NoSuchFileException{
         FileHandler fileHandler = new FileHandler();
         logger.addHandler(fileHandler);
         logger.setUseParentHandlers(false);
@@ -117,9 +118,15 @@ public class Server {
     private void loadCollectionFromFile() {
         CommandData commandData = new CommandData();
         commandData.command = new ReadCommand();
-        labCollection.execute(commandData);
-        logger.info("Load collection from file");
-        System.out.println("Load collection from file");
+        ResultData result = labCollection.execute(commandData);
+        if (result.hasErrorMessage()) {
+            System.err.println(result.errorMessage);
+            System.exit(0);
+//            throw new RuntimeException(result.errorMessage);
+        } else {
+            logger.info("Load collection from file");
+            System.out.println("Load collection from file");
+        }
 
     }
     private void accept() throws Exception{

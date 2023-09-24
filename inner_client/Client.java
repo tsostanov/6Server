@@ -128,17 +128,18 @@ public class Client implements IClientCommandExecutor {
         return null;
     }
     public ResultData executeScript(CommandData commandData){
+        ResultData resultData = new ResultData();
         try {
             scriptReading = true;
             scriptExecutor.executeScript(commandData);
             scriptReading = false;
             nestingLevel = 0;
+            resultData.resultText = "Script was successfully finished";
         }
         catch (Exception e){
+            resultData.resultText = "Error occurred: " + e.getMessage();
             warningComponent.showExceptionWarning(e);
         }
-        ResultData resultData = new ResultData();
-        resultData.resultText = "Script was successfully finished";
         return resultData;
     }
 

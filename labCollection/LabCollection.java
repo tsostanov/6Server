@@ -205,9 +205,9 @@ public class LabCollection implements IServerCommandExecutor {
             setIdPointerToMaxId(labWorks);
             labsList.addAll(labWorks);
         }
-        catch (WrongInputException e){
-            resultData.resultText = e.toString();
-        }
+//        catch (Exception e){
+//            resultData.resultText = e.toString();
+//        }
         catch (NumberFormatException e){
             String str = "CSV number format exception:\n" + e.getMessage();
             resultData.errorMessage = str;
@@ -241,7 +241,11 @@ public class LabCollection implements IServerCommandExecutor {
             resultData.errorMessage = str;
         }
         catch (IOException e) {
+            System.out.println(e);
             String str = "CSV some IO exception\n" + e.getMessage();
+            resultData.errorMessage = str;
+        } catch (WrongInputException e) {
+            String str = "Something went wrong" + e.getMessage();
             resultData.errorMessage = str;
         }
         return resultData;
